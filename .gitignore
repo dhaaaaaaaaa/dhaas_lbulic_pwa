@@ -1,0 +1,65 @@
+# Gradle Wrapper / Settings
+settings.gradle
+gradlew.bat
+
+hallo.md
+# Gradle und Build Verzeichnisse
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE-spezifische Dateien (STS, IntelliJ, NetBeans, VS Code)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.vscode/
+
+# Kompilate und Binaries
+*.class
+*.jar
+*.war
+*.ear
+*.dat
+
+# Node.js und Frontend (WICHTIG für E2E Übung)
+node_modules/
+.npm
+npm-debug.log
+yarn-error.log
+.pnp*
+.pnp.js
+
+# Cypress E2E Testing (Laut Aufgabenstellung untersagt im Repository)
+cypress/screenshots/
+cypress/videos/
+cypress/reports/
+
+# Betriebssystem-spezifische Dateien
+.DS_Store
+Thumbs.db
+.env
+# User-Daten
+datfiles/
+venlab_backup/*.dat

@@ -1,0 +1,44 @@
+services:
+  db:
+    container_name: venlab-db
+    image: postgres:15-alpine
+    restart: always
+    env_file: ".env"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./venlab_backup/restore.sql:/docker-entrypoint-initdb.d/10-restore.sql
+      - ./venlab_backup:/venlab_backup
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: .
+    container_name: venlab-backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "7070:8080"
+    env_file: ".env"
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/venlab
+      - SERVER_PORT=8080
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+
+  frontend:
+    build: ./frontend
+    container_name: venlab-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  db-data:
