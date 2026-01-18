@@ -2,6 +2,7 @@
 settings.gradle
 gradlew.bat
 
+.env.example
 hallo.md
 # Gradle und Build Verzeichnisse
 HELP.md
