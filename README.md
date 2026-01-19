@@ -1,111 +1,3 @@
-# VenLab - Informationssysteme: Vue PWA & Cloud Deployment
-
-## Einführung
-
-In dieser Phase des Projekts wurde die bestehende VenLab-Applikation zu einer Progressive Web App (PWA) erweitert und für das Cloud-Deployment vorbereitet. Zudem wurde ein automatisierter CI/CD-Workflow implementiert, um die Qualität durch kontinuierliche Tests sicherzustellen.
-
-## Ziele der Übung
-
-- Konfiguration der Applikation als **Progressive Web App (PWA)** für mobile Geräte.
-- Bereitstellung der Anwendung in der **Cloud**.
-- Sicherung des Zugangs durch ein **Login-System**.
-- Integration in einen **CI/CD-Workflow** mit automatisierten Testreports.
-- Erweiterung der UI um ein **Dark/Light-Theme** und dynamische **Attribut-Auswahl**.
-
----
-
-## Funktionen
-
-### Progressive Web App (PWA)
-
-- **Installierbar**: Die App kann als Icon auf dem Startbildschirm abgelegt werden.
-- **Standalone-Modus**: Öffnet im Vollbildmodus ohne Browser-UI.
-- **Offline-Fähigkeit**: Grundlegende Funktionen und schnelle Ladezeiten durch Service-Worker-Caching.
-- **Manifest**: Konfiguriertes Web-Manifest mit Icons und Theme-Farben.
-
-### Benutzeroberfläche
-
-- **Design-System**: Implementierung mit Vuetify für ein konsistentes Erlebnis.
-- **Theme-Switch**: Umschaltmöglichkeit zwischen Dark- und Light-Mode.
-- **Dynamische Tabellen**: Benutzer können auswählen, welche Spalten (Attribute) in den Tabellen angezeigt werden sollen.
-
-### Sicherheit & Backend
-
-- **Login**: Zugriffsschutz durch ein API-Key-basiertes Login-Verfahren.
-- **ReST-Schnittstelle**: Robustes Spring Boot Backend mit PostgreSQL-Anbindung.
-- **Filterung & Paging**: Serverseitige Verarbeitung großer Datenmengen zur Performance-Optimierung.
-
----
-
-## CI/CD Workflow
-
-Der automatisierte Workflow ist in `.github/workflows/gradle.yml` definiert und umfasst folgende Schritte:
-
-1. **Backend Unit-Tests**: Überprüfung der ReST-Schnittstelle und Datenbank-Integration.
-2. **Frontend Build**: Kompilierung der Vue-Applikation.
-3. **E2E-Tests**: Automatisierte End-to-End Tests mit Cypress zur Validierung der Benutzeroberfläche und Workflows.
-4. **Artifacts**: Speicherung von Testreports (HTML), Screenshots und Backend-Logs für das Debugging.
-
----
-
-## Voraussetzungen
-
-- **Java 22** (Temurin Distribution)
-- **Node.js 22**
-- **Docker & Docker Compose**
-- **PostgreSQL** (Port 5432)
-
----
-
-### VenLab - Informationssysteme: Vue PWA & Cloud Deployment
-
-## Anwendung
-
-1. **Repository klonen:**
-
-```
-clone https://github.com/TGM-HIT/insy5-informationssysteme-vue-pwa-pwa_yeren_ashemsidini_eyueksel.git
-```
-
-2. **.env und .dat dateien ergänzen**
-
-*.env (beispiel)*
-
-```
-POSTGRES_USER=[user]
-POSTGRES_PASSWORD=[pw]
-POSTGRES_DB=[db_name]
-
-DB_USERNAME=[user]
-DB_PASSWORD=[pw]
-ADMIN_PASSWORD=[pw_für_login]
-
-DB_URL=[db_url]
-```
-
-**.dat** dateien vom venlab_backup nehmen und im ordner in venlab_backup reinkopieren
-
-3. **build**
-
-```
-docker compose up -d --build
-```
-
----
-
-## Bewertung & Status
-
-- **PWA Konfiguration**: Abgeschlossen (Manifest, Icons, Offline-Support)
-- **Cloud-Deployment**: Vorbereitet
-- **CI/CD-Workflow**: Aktiv inklusive E2E-Tests und Reports
-- **UI-Erweiterungen**: Dark Mode und Attribut-Filterung integriert
-- **Login-Sicherung**: Implementiert (X-API-KEY Header)
-
-**Bearbeitet:** Januar 2026
-**Gruppengröße:** 3 Personen
-# pwatest
-
-
 # Lazo und ich
 
 ## Problem .gitignore
@@ -186,3 +78,73 @@ Dann im Terminal:
 ./gradlew clean test
 BUILD SUCCESSFUL in 3s
 ````
+
+## Schritte für PWA
+
+
+
+### CI/CD
+Pfad .github/workflows/ dort Datei "ci.yml" erstellen:
+````yml
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "22"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Backend - build & test
+        run: ./gradlew clean test
+
+      - name: Upload backend test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-report
+          path: |
+            build/test-results/test
+            build/reports/tests/test
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Frontend - install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend - build
+        working-directory: frontend
+        run: npm run build
+
+````
+Zuerst schlug unser Workflow beim Schritt ./gradlew clean test fehl:
+"Permission denied", wir mussten gradlew adden:
+````
+chmod +x gradlew
+````
+
+Später beim Laufen der Tests im CI schlugen alle Tests fehl, weil die Anwendung eine Postgres-Datenbank im Schema VENLAB erwartete. Wir haben dann Test dafür gesetzt damit ging es
