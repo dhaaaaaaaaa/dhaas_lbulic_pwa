@@ -150,3 +150,26 @@ Dann im Terminal:
 BUILD SUCCESSFUL in 3s
 ````
 
+## Cloud 
+
+Wir wollen das Projekt jetzt in die Cloud erweitern. Am einfachsten geht das mit einem Droplet von DigitalOcean. Da müssen wir uns zuerst das GitHub Student Angebot holen und eine Zahlungsmethode ähnlich wie bei FireBase Studio hinzufügen. Nachdem wir das gemacht haben stehen uns 200$ zur Verfügung (was ca. für ein Jahr reicht). Somit können wir problemlos unser erstes Droplet erstellen (Ubuntu) mit allen Standardeinstellungen. Beim Erstellen des Droplets können wir uns entweder in unserer host cli damit rumquälen einen ssh key zu adden oder wir machen das schnell über die GUI von DigitalOcean. Nach dem erstellen des SSH Keys können wir 
+
+Docker installieren in der Web Konsole <br>
+ 
+zuerst apt update <br>
+
+Danach root@ubuntu-s-2vcpu-4gb-fra1-01:~# apt install -y docker.io docker-compose-plugin
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package docker-compose-plugin
+
+aber das ist zu alt also 
+
+root@ubuntu-s-2vcpu-4gb-fra1-01:~# apt install -y docker.io docker-compose
+
+
+# Quellen
+[1]: Digital Ocean Droplet Dokumentation https://docs.digitalocean.com/products/droplets/ 
+
+
