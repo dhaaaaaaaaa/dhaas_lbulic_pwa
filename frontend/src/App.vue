@@ -41,9 +41,11 @@
 </template>
 
 <script>
-// Import der Login Komponente
-import Login from './components/Login.vue';
+// 1. Der wichtigste Fix: Axios importieren
+import axios from 'axios';
 
+// Import der Komponenten
+import Login from './components/Login.vue';
 import AnalysisTable from './components/AnalysisTable.vue';
 import SampleTable from './components/SampleTable.vue';
 import BoxTable from './components/BoxTable.vue';
@@ -53,7 +55,7 @@ import LogTable from './components/LogTable.vue';
 
 export default {
   components: {
-    Login, // Registrieren
+    Login,
     AnalysisTable,
     SampleTable,
     BoxTable,
@@ -71,23 +73,22 @@ export default {
     }
   },
   mounted() {
-    // Vorhandene Theme-Logik...
+    // Theme-Logik
     const savedTheme = localStorage.getItem('venlab-theme');
     if (savedTheme) this.$vuetify.theme.global.name = savedTheme;
 
     // Axios Interceptor für globales Error Handling
     axios.interceptors.response.use(
-        response => response, // Erfolgreiche Anfragen einfach durchreichen
+        response => response,
         error => {
-          // Wenn der Server 401 (Unauthorized) antwortet
           if (error.response && error.response.status === 401) {
-            this.logout(); // Lokale Session löschen und Login anzeigen
+            this.logout();
           }
           return Promise.reject(error);
         }
     );
 
-    // Login wiederherstellen
+    // Login-Status beim Neuladen wiederherstellen
     const savedKey = localStorage.getItem('venlab-api-key');
     if (savedKey) {
       axios.defaults.headers.common['X-API-KEY'] = savedKey;
@@ -102,13 +103,15 @@ export default {
     },
     login() {
       this.isLoggedIn = true;
-      localStorage.setItem('venlab-auth', 'true');
+      // Hinweis: Du speicherst oben 'venlab-api-key', stelle sicher,
+      // dass dieser beim Login-Prozess auch gesetzt wird!
     },
     logout() {
       this.isLoggedIn = false;
+      localStorage.removeItem('venlab-api-key'); // Key löschen
       localStorage.removeItem('venlab-auth');
-      // Optional: Tab zurücksetzen
-      this.tab = 'analysis';
+      delete axios.defaults.headers.common['X-API-KEY']; // Header säubern
+      this.tab = null;
     }
   }
 }
