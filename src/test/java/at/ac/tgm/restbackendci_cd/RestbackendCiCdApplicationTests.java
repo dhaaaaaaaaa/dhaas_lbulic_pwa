@@ -1,5 +1,6 @@
 package at.ac.tgm.restbackendci_cd;
 
+import org.springframework.test.context.ActiveProfiles;
 import at.ac.tgm.restbackendci_cd.repository.AnalysisRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class RestbackendCiCdApplicationTests {
     @Autowired
     private MockMvc mockMvc;
