@@ -28,6 +28,15 @@ jobs:
       - name: Backend - build & test
         run: ./gradlew clean test
 
+      - name: Upload backend test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-report
+          path: |
+            build/test-results/test
+            build/reports/tests/test
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
