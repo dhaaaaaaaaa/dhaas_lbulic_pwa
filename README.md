@@ -1,87 +1,6 @@
-# Lazo und ich
+# GEK916 Informationssysteme "PWA Deployment"
 
-## Problem .gitignore
-Wir haben gitignore nicht richtig gesetzt im Projektpfad, und in unserem alten Repo haben wir probiert Commits zu löschen und es neu raufzuladen aber es ging nicht weil alle Dateien schon von früher gespeichert waren
-
-## Problem CI
-Wir haben als wir die CI pipeline raufgepusht haben rotes kreuz gehabt weil der Runner die Datei gradlew nicht ausführen darf
-Lösung war:
-````
-chmod +x gradlew
-git add gradlew
-git commit -m ""
-git push
-````
-
-## Problem CI 2.0
-Nachdem wir das oben gefixt hatten war das, das nächste Problem:
-````
-0s
-Run ./gradlew clean test
-Error: Unable to access jarfile /home/runner/work/dhaas_lbulic_pwa/dhaas_lbulic_pwa/gradle/wrapper/gradle-wrapper.jar
-Error: Process completed with exit code 1.
-````
-Lokal klappt es aber auf GitHub ist die Datei nicht vorhanden, beim prüfen gesehen sie ist nicht da:
-
-````
-dominikhaas@MacBook-Air-von-Dominik jpa % ls gradle/wrapper
-gradle-wrapper.properties
-dominikhaas@MacBook-Air-von-Dominik jpa % 
-````
-Wird nicht gefunden weil wir sie im gitignore hatten, als Lösung erzeugen und auf GitHub pushen
-````
-brew install gradle
-gradle wrapper
-git add gradle/wrapper/gradle-wrapper.jar
-git commit -m "Gradle wrapper jar für CI hinzugefügt"
-git push
-````
-Danach ging CI
-
-## Test bei CI fehlgeschlagen
-````
-./gradlew clean test
-````
-Das erzeugt ein testprotokoll
-
-Ergebnis war es failed bei den Tests weil wir ja unsere env datei im gitignore hatten
-
-### Lösung: Testumgebung erstellen
-In build.gradle als dependencie hinzufügen:
-    "runtimeOnly 'com.h2database:h2'"
-
-Dann bei src/test/resources/ die Datei "application-test.properties" erstellen
-Folgende Werte rein:
-````java
-spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS VENLAB
-spring.datasource.username=sa
-spring.datasource.password=
-
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.jpa.show-sql=false
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
-spring.jpa.properties.hibernate.default_schema=VENLAB
-
-app.admin.password=test123
-````
-
-Dann RestbackendCiCdApplicationTests.java öffnen und Testprofil aktivieren:
-````java
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-class RestbackendCiCdApplicationTests {
-````
-
-Dann im Terminal:
-````
-./gradlew clean test
-BUILD SUCCESSFUL in 3s
-````
-
-## Schritte für PWA
-
-
+## Arbeitsschritte
 
 ### CI/CD
 Pfad .github/workflows/ dort Datei "ci.yml" erstellen:
@@ -148,3 +67,86 @@ chmod +x gradlew
 ````
 
 Später beim Laufen der Tests im CI schlugen alle Tests fehl, weil die Anwendung eine Postgres-Datenbank im Schema VENLAB erwartete. Wir haben dann Test dafür gesetzt damit ging es
+
+
+## Probleme die wir hatten
+
+### Problem .gitignore
+Wir haben gitignore nicht richtig gesetzt im Projektpfad, und in unserem alten Repo haben wir probiert Commits zu löschen und es neu raufzuladen aber es ging nicht weil alle Dateien schon von früher gespeichert waren
+
+### Problem CI
+Wir haben als wir die CI pipeline raufgepusht haben rotes kreuz gehabt weil der Runner die Datei gradlew nicht ausführen darf
+Lösung war:
+````
+chmod +x gradlew
+git add gradlew
+git commit -m ""
+git push
+````
+
+### Problem CI 2.0
+Nachdem wir das oben gefixt hatten war das, das nächste Problem:
+````
+0s
+Run ./gradlew clean test
+Error: Unable to access jarfile /home/runner/work/dhaas_lbulic_pwa/dhaas_lbulic_pwa/gradle/wrapper/gradle-wrapper.jar
+Error: Process completed with exit code 1.
+````
+Lokal klappt es aber auf GitHub ist die Datei nicht vorhanden, beim prüfen gesehen sie ist nicht da:
+
+````
+dominikhaas@MacBook-Air-von-Dominik jpa % ls gradle/wrapper
+gradle-wrapper.properties
+dominikhaas@MacBook-Air-von-Dominik jpa % 
+````
+Wird nicht gefunden weil wir sie im gitignore hatten, als Lösung erzeugen und auf GitHub pushen
+````
+brew install gradle
+gradle wrapper
+git add gradle/wrapper/gradle-wrapper.jar
+git commit -m "Gradle wrapper jar für CI hinzugefügt"
+git push
+````
+Danach ging CI
+
+### Test bei CI fehlgeschlagen
+````
+./gradlew clean test
+````
+Das erzeugt ein testprotokoll
+
+Ergebnis war es failed bei den Tests weil wir ja unsere env datei im gitignore hatten
+
+#### Lösung: Testumgebung erstellen
+In build.gradle als dependencie hinzufügen:
+    "runtimeOnly 'com.h2database:h2'"
+
+Dann bei src/test/resources/ die Datei "application-test.properties" erstellen
+Folgende Werte rein:
+````java
+spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS VENLAB
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
+spring.jpa.properties.hibernate.default_schema=VENLAB
+
+app.admin.password=test123
+````
+
+Dann RestbackendCiCdApplicationTests.java öffnen und Testprofil aktivieren:
+````java
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+class RestbackendCiCdApplicationTests {
+````
+
+Dann im Terminal:
+````
+./gradlew clean test
+BUILD SUCCESSFUL in 3s
+````
+
