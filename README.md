@@ -16,16 +16,51 @@ Das Ziel dieser Übung ist das Bereitstellen einer Webanwendung in der Cloud. Da
 
 # Grundanforderungen
 
-- PWA Konfiguration
-- Cloud-Deployment mit einfachem Login
-- Einbindung von CI/CD-Workflow mit Testreports
-- Auswahlfeld von zu anzeigenden Attributen der einzelnen Tabellen
-- Theme mit dark/light Switch
+## PWA Konfiguration
+## Cloud-Deployment mit einfachem Login
 
-# Umgesetzte Änderungen 
+Einer der einfachsten Wege zur Cloud ist durch ein Droplet von DigitalOcean. Da haben wir uns zuerst das GitHub Student Pack geholt mit dem wir ein Credit von 200$ haben (ein Jahr Ablaufzeit) und das ist mehr als genug für unser Projekt. Droplet wird erstellt mit Standardeinstellungen, läuft auf Ubuntu und ist über eine Public IP erreichbar. Davor musste ein SSH Key hinzugefügt werden (oder wenn man keinen hat schnell erstellen, kurzes Tutorial ist eh da direkt dabei). Jetzt kann man die Verbindung zur Konsole per SSH starten und mit Terminalbefehlen arbeiten:
 
-## Digital Ocean
-Einer der einfachsten Wege zur Cloud ist durch ein Droplet von DigitalOcean. Da haben wir uns zuerst das GitHub Student Pack geholt mit dem wir ein Credit von 200$ haben (ein Jahr Ablaufzeit) und das ist mehr als genug für unser Projekt. Droplet wird erstellt mit Standardeinstellungen, läuft auf Ubuntu und ist über eine Public IP erreichbar. Davor musste ein SSH Key hinzugefügt werden (oder wenn man keinen hat schnell erstellen, kurzes Tutorial ist eh da direkt dabei) 
+*Alles auf den neuesten Stand bringen:*
+```
+sudo apt update && sudo apt upgrade -y
+```
+
+*Docker Installation:*
+```
+sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+*Unser Projekt rüberbringen:*
+```
+git clone https://github.com/dhaaaaaaaaa/dhaas_lbulic_pwa
+```
+
+*Die env Datei (weil im gitignore):*
+```
+nano .env
+```
+Und dann einfach den Inhalt händisch rüberkopieren vom lokalen Projekt <br>
+
+*Dann das Backend gestartet:*
+```
+docker compose up -d
+```
+Dann kam kurz 502 Bad Gateway aber es dauert ca. eine halbe Minute bis man wirklich drauf zugreifen kann <br>
+Nachdem dann kein direkter Error mehr geworfen wurde stand dann trocken da "No Data available" weil die .dat Dateien natürlich auch nicht mitgepullt wurden weil sie sich in der gitignore befanden. Rübekopieren per Host-Terminal hat dem Droplet nicht so sehr gefallen und er war sehr hartnäckig mit externen Verbindungen also haben wir die .dat Dateien mitgepusht und dann wieder gepullt mit dem Droplet 
+
+```
+docker compose up -d
+```
+
+
+
+
+## Einbindung von CI/CD-Workflow mit Testreports
+## Auswahlfeld von zu anzeigenden Attributen der einzelnen Tabellen
+## Theme mit dark/light Switch
+
+
 
 
 
