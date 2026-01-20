@@ -128,6 +128,41 @@ Damit wird es beim Teststart eine frische In‑Memory‑DB angelegt und das Sche
 
 
 ## Auswahlfeld von zu anzeigenden Attributen der einzelnen Tabellen
+Um alle anzeigen zu lassen haben wir Standartmäßig ein Array erstellt welche alle Attribute anzeigt in AnalysisTable und SampleTable:
+````
+
+````
+Oben im Header in der Klasse haben wir es dann anzeigen lassen:
+````
+<v-row class="px-4 pb-2">
+  <v-col cols="12">
+    <v-select
+        v-model="selectedHeaders"
+        :items="allHeaders"
+        label="Spalten anzeigen/ausblenden"
+        multiple
+        return-object
+        density="compact"
+        variant="outlined"
+        hide-details
+        chips
+        closable-chips
+    ></v-select>
+  </v-col>
+</v-row>
+````
+v-select bindet dabei diese Dinge ein:
+- :items="allHeaders" werden alle möglichen Spalten/Attribute ausgewählt
+- v-model="selectedHeaders" → welche Spalten aktuell angezeigt werden
+- multiple + chips ist f+r Mehrfachauswahl mit Chips, die man wegklicken kann
+- Standartmäßig wird das model "selectedHeaders" ausgewählt also das was der User will
+
+
+
+
+
+
+
 ## Theme mit dark/light Switch
 
 
