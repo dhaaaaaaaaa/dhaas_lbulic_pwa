@@ -57,6 +57,76 @@ docker compose up -d
 
 
 ## Einbindung von CI/CD-Workflow mit Testreports
+Für CI müssen wir unter .github/workflow eine ci.yml Datei anlegen, Dieser Workflow wird getriggert bei jedem Push auf main oder jedem Pull Request auf main
+````
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "22"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Backend - build & test
+        run: ./gradlew clean test
+
+      - name: Upload backend test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-report
+          path: |
+            build/test-results/test
+            build/reports/tests/test
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Frontend - install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend - build
+        working-directory: frontend
+        run: npm run build
+````
+build führt dabei wie folgt aus:
+- zuerst Checkout des Repositories
+- dann JDK 22 bereitstellen
+- dann wird Gradle‑Wrapper verwendet 
+- Am Ende wird das Backend mit Gradle gebaut und die Tests ausgeführt
+- Ab Zeile 31: Nach dem Testlauf werden die von Gradle erzeugten Reports als Artefakt auch hochgeladen
+
+
+Damit die Tests im CI ohne echte Postgres‑Datenbank laufen, haben wir ein eigenes Test‑Profil eingerichtet
+Dafür haben wir Test application.properties eingerichtet und bei den Tests das Testprofil ausgewählt
+Damit wird es beim Teststart eine frische In‑Memory‑DB angelegt und das Schema VENLAB automatisch erzeugt 
+
+
+
 ## Auswahlfeld von zu anzeigenden Attributen der einzelnen Tabellen
 ## Theme mit dark/light Switch
 
