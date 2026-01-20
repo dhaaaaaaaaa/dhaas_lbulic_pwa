@@ -17,6 +17,63 @@ Das Ziel dieser Übung ist das Bereitstellen einer Webanwendung in der Cloud. Da
 # Grundanforderungen
 
 ## PWA Konfiguration
+
+*Vite-Plugin PWA in /frontend/vite.config.js:*
+
+```
+import { VitePWA } from 'vite-plugin-pwa'
+...
+VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: [...],
+      manifest: {
+        name: 'VenLab Dashboard',
+        short_name: 'VenLab',
+        description: 'Verwaltung von Laborproben und Analysen',
+        theme_color: ...
+```
+
+autoUpdate bewirkt, dass der Benutzer nicht immer manuell refreshen muss. includeAssets werden im Cache gespeichert für Offline-Zugriff. manifest ist eine JSON die dem Browser sagt wie sich die App zu verhalen hat also heisst, aussieht usw. <br>
+Das generierte WebApp Manifest befindet sich in ``` frontend/dist/manifest.webmanifest ```:
+
+```
+{
+  "name": "VenLab Dashboard",
+  "short_name": "VenLab",
+  "description": "Verwaltung von Laborproben und Analysen",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976D2",
+  "icons": [...]
+}
+```
+
+*Service Worker:*
+
+Der Service Worker ist ein js, das im Hintergrund läuft ``` frontend/dist/sw.js ```
+```
+self.skipWaiting(),
+e.clientsClaim(),
+e.precacheAndRoute([
+  {url:"registerSW.js", revision:"..."},
+  {url:"index.html", revision:"..."},
+  {url:"assets/index-OX0AglLa.js", revision:null},
+  ...
+])
+```
+Und in ``` frontend/dist/registerSW.js  ```
+```
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+  })
+}
+```
+Wird gewartet bis die Seite geladen wird und dann der Service Worker gestartet
+
+
+
 ## Cloud-Deployment mit einfachem Login
 
 Einer der einfachsten Wege zur Cloud ist durch ein Droplet von DigitalOcean. Da haben wir uns zuerst das GitHub Student Pack geholt mit dem wir ein Credit von 200$ haben (ein Jahr Ablaufzeit) und das ist mehr als genug für unser Projekt. Droplet wird erstellt mit Standardeinstellungen, läuft auf Ubuntu und ist über eine Public IP erreichbar. Davor musste ein SSH Key hinzugefügt werden (oder wenn man keinen hat schnell erstellen, kurzes Tutorial ist eh da direkt dabei). Jetzt kann man die Verbindung zur Konsole per SSH starten und mit Terminalbefehlen arbeiten:
