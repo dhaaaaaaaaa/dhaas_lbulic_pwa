@@ -1,112 +1,37 @@
-# VenLab - Informationssysteme: Vue PWA & Cloud Deployment
+# Einführung
 
-## Einführung
+Bei dieser Übung soll die vorhandene Implementierung in der Cloud deployed werden und auch als PWA für mobile Endgeräte angeboten werden.
 
-In dieser Phase des Projekts wurde die bestehende VenLab-Applikation zu einer Progressive Web App (PWA) erweitert und für das Cloud-Deployment vorbereitet. Zudem wurde ein automatisierter CI/CD-Workflow implementiert, um die Qualität durch kontinuierliche Tests sicherzustellen.
+# Ziele 
 
-## Ziele der Übung
+Das Ziel dieser Übung ist das Bereitstellen einer Webanwendung in der Cloud. Dabei sollen Werkzeuge zum Einsatz kommen, die das leichte Umsetzen, Testen und Bereitstellen beschleunigen. Bestehender Code soll dabei angepasst und erweitert werden ohne die Funktionalität zu beeinträchtigen.
 
-- Konfiguration der Applikation als **Progressive Web App (PWA)** für mobile Geräte.
-- Bereitstellung der Anwendung in der **Cloud**.
-- Sicherung des Zugangs durch ein **Login-System**.
-- Integration in einen **CI/CD-Workflow** mit automatisierten Testreports.
-- Erweiterung der UI um ein **Dark/Light-Theme** und dynamische **Attribut-Auswahl**.
+# Voraussetzungen
 
----
+- Docker Compose
+- Kenntnisse über Javascript
+- Funktionstüchtige ReST Schnittstelle aus "ReST Backend"
+- Funktionstüchtige JS-Applikation aus "Vue CRUD"
+- Kenntnisse über CI/CD-Workflow oder Zusammenarbeit mit DevOps Engineer
 
-## Funktionen
+# Grundanforderungen
 
-### Progressive Web App (PWA)
+- PWA Konfiguration
+- Cloud-Deployment mit einfachem Login
+- Einbindung von CI/CD-Workflow mit Testreports
+- Auswahlfeld von zu anzeigenden Attributen der einzelnen Tabellen
+- Theme mit dark/light Switch
 
-- **Installierbar**: Die App kann als Icon auf dem Startbildschirm abgelegt werden.
-- **Standalone-Modus**: Öffnet im Vollbildmodus ohne Browser-UI.
-- **Offline-Fähigkeit**: Grundlegende Funktionen und schnelle Ladezeiten durch Service-Worker-Caching.
-- **Manifest**: Konfiguriertes Web-Manifest mit Icons und Theme-Farben.
+# Umgesetzte Änderungen 
 
-### Benutzeroberfläche
-
-- **Design-System**: Implementierung mit Vuetify für ein konsistentes Erlebnis.
-- **Theme-Switch**: Umschaltmöglichkeit zwischen Dark- und Light-Mode.
-- **Dynamische Tabellen**: Benutzer können auswählen, welche Spalten (Attribute) in den Tabellen angezeigt werden sollen.
-
-### Sicherheit & Backend
-
-- **Login**: Zugriffsschutz durch ein API-Key-basiertes Login-Verfahren.
-- **ReST-Schnittstelle**: Robustes Spring Boot Backend mit PostgreSQL-Anbindung.
-- **Filterung & Paging**: Serverseitige Verarbeitung großer Datenmengen zur Performance-Optimierung.
-
----
-
-## CI/CD Workflow
-
-Der automatisierte Workflow ist in `.github/workflows/gradle.yml` definiert und umfasst folgende Schritte:
-
-1. **Backend Unit-Tests**: Überprüfung der ReST-Schnittstelle und Datenbank-Integration.
-2. **Frontend Build**: Kompilierung der Vue-Applikation.
-3. **E2E-Tests**: Automatisierte End-to-End Tests mit Cypress zur Validierung der Benutzeroberfläche und Workflows.
-4. **Artifacts**: Speicherung von Testreports (HTML), Screenshots und Backend-Logs für das Debugging.
-
----
-
-## Voraussetzungen
-
-- **Java 22** (Temurin Distribution)
-- **Node.js 22**
-- **Docker & Docker Compose**
-- **PostgreSQL** (Port 5432)
-
----
-
-### VenLab - Informationssysteme: Vue PWA & Cloud Deployment
-
-## Anwendung
-
-1. **Repository klonen:**
-
-```
-clone https://github.com/TGM-HIT/insy5-informationssysteme-vue-pwa-pwa_yeren_ashemsidini_eyueksel.git
-```
-
-2. **.env und .dat dateien ergänzen**
-
-*.env (beispiel)*
-
-```
-POSTGRES_USER=[user]
-POSTGRES_PASSWORD=[pw]
-POSTGRES_DB=[db_name]
-
-DB_USERNAME=[user]
-DB_PASSWORD=[pw]
-ADMIN_PASSWORD=[pw_für_login]
-
-DB_URL=[db_url]
-```
-
-**.dat** dateien vom venlab_backup nehmen und im ordner in venlab_backup reinkopieren
-
-3. **build**
-
-```
-docker compose up -d --build
-```
-
----
-
-## Bewertung & Status
-
-- **PWA Konfiguration**: Abgeschlossen (Manifest, Icons, Offline-Support)
-- **Cloud-Deployment**: Vorbereitet
-- **CI/CD-Workflow**: Aktiv inklusive E2E-Tests und Reports
-- **UI-Erweiterungen**: Dark Mode und Attribut-Filterung integriert
-- **Login-Sicherung**: Implementiert (X-API-KEY Header)
-
-**Bearbeitet:** Januar 2026
-**Gruppengröße:** 3 Personen
-# pwatest
+## Digital Ocean
+Einer der einfachsten Wege zur Cloud ist durch ein Droplet von DigitalOcean. Da haben wir uns zuerst das GitHub Student Pack geholt mit dem wir ein Credit von 200$ haben (ein Jahr Ablaufzeit) und das ist mehr als genug für unser Projekt. Droplet wird erstellt mit Standardeinstellungen, läuft auf Ubuntu und ist über eine Public IP erreichbar. Davor musste ein SSH Key hinzugefügt werden (oder wenn man keinen hat schnell erstellen, kurzes Tutorial ist eh da direkt dabei) 
 
 
-# Lazo und ich
+
+# Probleme bei der Umsetzung 
+
+
 
 ## Problem .gitignore
 Wir haben gitignore nicht richtig gesetzt im Projektpfad, und in unserem alten Repo haben wir probiert Commits zu löschen und es neu raufzuladen aber es ging nicht weil alle Dateien schon von früher gespeichert waren
