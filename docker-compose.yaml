@@ -28,6 +28,8 @@ services:
     env_file: ".env"
     environment:
       - DB_URL=jdbc:postgresql://db:5432/venlab
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
       - SERVER_PORT=8080
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
 

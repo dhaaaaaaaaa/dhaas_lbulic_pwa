@@ -2,6 +2,7 @@
 settings.gradle
 gradlew.bat
 
+venlabbackup.dump
 .env.example
 hallo.md
 # Gradle und Build Verzeichnisse
