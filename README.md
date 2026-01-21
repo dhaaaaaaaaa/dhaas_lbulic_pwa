@@ -74,6 +74,16 @@ Wird gewartet bis die Seite geladen wird und dann der Service Worker gestartet
 
 Er ist Teil der Web Worker API. Web Worker wurden eingeführt um js Multitasking zu ermöglichen. Der Service Worker ist eine spezielle Form davon, die dauerhaft im Browser registriert wird und sich an eine bestimmte IP bindet. Im Gegensatz zur Webseite selbst, die "stirbt" wenn man Tab schließt bleibt die Registrierung des Workers im Browser erhalten. Er wird vom Browser bei Bedarf aufgeweckt (wenn eine Anfrage reinkommt) und danach wieder schlafen gelegt.
 
+#### Manifest: 
+Das Manifest ist eine JSON-Datei, in der Name, Icons, Start-URL und Darstellungsart meiner PWA definiert sind. Der Browser nutzt diese Infos, um die App installierbar zu machen und sie wie eine native App darzustellen.
+
+### Service Worker:
+Der Service Worker läuft im Hintergrund, cached wichtige Ressourcen und ermöglicht damit Offline-Nutzung und schnellere Ladezeiten. Außerdem ist er ein zentraler Baustein, damit der Browser meine Seite als installierbare PWA erkennt und aktualisieren kann.
+
+### https:
+Eine PWA braucht HTTPS, weil der Service Worker nur in einer sicheren Umgebung laufen darf. Da er Netzwerkverkehr abfangen und verändern kann, erzwingen Browser eine verschlüsselte Verbindung, um Manipulationen zu verhindern und die Sicherheit der Nutzer zu gewährleisten.
+
+
 
 
 ## Cloud-Deployment mit einfachem Login
