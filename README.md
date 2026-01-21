@@ -234,7 +234,11 @@ v-select bindet dabei diese Dinge ein:
 
 ## Theme mit dark/light Switch
 
-
+ Wir nutzen Vuetify als UI-Framework
+ In main.js initialisieren wir Vuetify mit einem Standard-Theme, hier defaultTheme: 'light' 
+ In App.vue haben wir in der App-Bar einen Button, der eine Methode toggleTheme aufruft.  
+ Beim Start der App lesen wir in mounted() dieses gespeicherte Theme wieder aus und setzen es in Vuetify.
+Dadurch merkt sich die Anwendung, ob der Benutzer zuletzt den Dark-Mode oder Light-Mode benutzt hat, und zeigt das passende Design direkt wieder an.
 
 
 
