@@ -72,6 +72,8 @@ if('serviceWorker' in navigator) {
 ```
 Wird gewartet bis die Seite geladen wird und dann der Service Worker gestartet
 
+Er ist Teil der Web Worker API. Web Worker wurden eingeführt um js Multitasking zu ermöglichen. Der Service Worker ist eine spezielle Form davon, die dauerhaft im Browser registriert wird und sich an eine bestimmte IP bindet. Im Gegensatz zur Webseite selbst, die "stirbt" wenn man Tab schließt bleibt die Registrierung des Workers im Browser erhalten. Er wird vom Browser bei Bedarf aufgeweckt (wenn eine Anfrage reinkommt) und danach wieder schlafen gelegt.
+
 
 
 ## Cloud-Deployment mit einfachem Login
